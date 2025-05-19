@@ -14,13 +14,21 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { Brush, Users, Trophy } from "lucide-react";
+import { Brush, Users, Trophy, Settings } from "lucide-react";
+import { useTheme } from "next-themes";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 export default function Home() {
   const router = useRouter();
   const [nickname, setNickname] = useState("");
   const [roomCode, setRoomCode] = useState("");
   const [rounds, setRounds] = useState(5);
+  const { theme, setTheme } = useTheme();
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const handleJoinGame = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +51,39 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
+      <div className="container mx-auto px-4 py-4 flex justify-end">
+        <Popover open={settingsOpen} onOpenChange={setSettingsOpen}>
+          <PopoverTrigger asChild>
+            <Button variant="ghost" size="icon" aria-label="Settings">
+              <Settings className="h-6 w-6" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent align="end" className="w-44">
+            <div className="font-semibold mb-2">Theme</div>
+            <Button
+              variant={theme === "light" ? "default" : "outline"}
+              className="w-full mb-1"
+              onClick={() => setTheme("light")}
+            >
+              Light
+            </Button>
+            <Button
+              variant={theme === "dark" ? "default" : "outline"}
+              className="w-full mb-1"
+              onClick={() => setTheme("dark")}
+            >
+              Dark
+            </Button>
+            <Button
+              variant={theme === "system" ? "default" : "outline"}
+              className="w-full"
+              onClick={() => setTheme("system")}
+            >
+              System
+            </Button>
+          </PopoverContent>
+        </Popover>
+      </div>
       <div className="container mx-auto px-4 py-16">
         <div className="flex flex-col items-center justify-center text-center">
           <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 mb-6">
